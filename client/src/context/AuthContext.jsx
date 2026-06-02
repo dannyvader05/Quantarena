@@ -1,0 +1,59 @@
+import { createContext, useContext, useState, useEffect } from 'react'
+import api from '../services/api'
+
+const AuthContext = createContext()
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken')
+    const savedUser = localStorage.getItem('user')
+    if (token && savedUser) {
+      setUser(JSON.parse(savedUser))
+    }
+    setLoading(false)
+  }, [])
+
+  const register = async (username, email, password) => {
+    const res = await api.post('/auth/register', { username, email, password })
+    localStorage.setItem('accessToken', res.data.accessToken)
+    localStorage.setItem('user', JSON.stringify({
+      _id: res.data._id,
+      username: res.data.username,
+      email: res.data.email,
+      virtualBalance: res.data.virtualBalance,
+    }))
+    setUser(res.data)
+    return res.data
+  }
+
+  const login = async (email, password) => {
+    const res = await api.post('/auth/login', { email, password })
+    localStorage.setItem('accessToken', res.data.accessToken)
+    localStorage.setItem('user', JSON.stringify({
+      _id: res.data._id,
+      username: res.data.username,
+      email: res.data.email,
+      virtualBalance: res.data.virtualBalance,
+    }))
+    setUser(res.data)
+    return res.data
+  }
+
+  const logout = async () => {
+    await api.post('/auth/logout')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('user')
+    setUser(null)
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, loading, register, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => useContext(AuthContext)
