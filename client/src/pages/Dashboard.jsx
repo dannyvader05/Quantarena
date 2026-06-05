@@ -1,7 +1,9 @@
 import { useAuth } from '../context/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 const Dashboard = () => {
   const { user, logout } = useAuth()
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen bg-gray-950 text-white flex flex-col items-center justify-center">
@@ -13,12 +15,20 @@ const Dashboard = () => {
           ${user?.virtualBalance?.toLocaleString()}
         </p>
       </div>
-      <button
-        onClick={logout}
-        className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
-      >
-        Logout
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={() => navigate('/trading')}
+          className="bg-green-500 hover:bg-green-600 text-black font-bold px-6 py-2 rounded-lg transition"
+        >
+          Start Trading
+        </button>
+        <button
+          onClick={logout}
+          className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   )
 }
