@@ -6,6 +6,8 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/auth");
 const tradingRoutes = require("./routes/trading");
+const analyticsRoutes = require("./routes/analytics");
+const watchlistRoutes = require("./routes/watchlist");
 
 connectDB();
 
@@ -17,6 +19,8 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/trading", tradingRoutes);
+app.use("/api/analytics", analyticsRoutes);
+app.use("/api/watchlist", watchlistRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "QuantArena API running" });
