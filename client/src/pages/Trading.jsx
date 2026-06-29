@@ -8,11 +8,13 @@ import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { LayoutDashboard, LogOut, Trophy } from 'lucide-react'
 
+
 const Trading = () => {
   const [selectedStock, setSelectedStock] = useState(null)
   const { portfolio, loading, refetch } = usePortfolio()
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+
 
   const handleLogout = async () => {
     await logout()
@@ -65,6 +67,7 @@ const Trading = () => {
           <LogOut size={15} />
           Logout
         </button>
+        
       </div>
     </div>
   </div>

@@ -8,6 +8,7 @@ const {
   tournamentBuy,
   tournamentSell,
   getLeaderboard,
+  getTournamentTrades
 } = require("../controllers/tournamentController");
 const { protect } = require("../middleware/authMiddleware");
 
@@ -18,5 +19,6 @@ router.post("/:id/join", protect, joinTournament);
 router.post("/:id/buy", protect, tournamentBuy);
 router.post("/:id/sell", protect, tournamentSell);
 router.get("/:id/leaderboard", protect, getLeaderboard);
+router.get("/:id/trades", protect, getTournamentTrades);
 
 module.exports = router;

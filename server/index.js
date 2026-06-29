@@ -10,6 +10,7 @@ const tradingRoutes = require("./routes/trading");
 const analyticsRoutes = require("./routes/analytics");
 const watchlistRoutes = require("./routes/watchlist");
 const tournamentRoutes = require("./routes/tournaments");
+const aiRoutes = require("./routes/ai");
 const { initSocket } = require("./socket/socketServer");
 
 connectDB();
@@ -26,6 +27,7 @@ app.use("/api/trading", tradingRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/watchlist", watchlistRoutes);
 app.use("/api/tournaments", tournamentRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "QuantArena API running" });

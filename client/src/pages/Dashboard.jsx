@@ -8,11 +8,13 @@ import AnalyticsStats from '../components/AnalyticsStats'
 import Watchlist from '../components/Watchlist'
 import { LogOut, TrendingUp, Trophy } from 'lucide-react'
 
+
 const Dashboard = () => {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [analytics, setAnalytics] = useState(null)
   const [loading, setLoading] = useState(true)
+  
 
   useEffect(() => {
     const fetch = async () => {
@@ -47,6 +49,9 @@ const Dashboard = () => {
           <button onClick={logout} className="flex items-center gap-2 text-gray-400 hover:text-red-400 transition text-sm">
             <LogOut size={16} /> Logout
           </button>
+          
+
+      
         </div>
       </nav>
 

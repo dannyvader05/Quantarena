@@ -333,6 +333,20 @@ async function refreshStatuses() {
     { $set: { status: "ENDED" } }
   );
 }
+// @desc    My trade history for this tournament
+// @route   GET /api/tournaments/:id/trades
+const getTournamentTrades = async (req, res) => {
+  try {
+    const trades = await TournamentTrade.find({
+      tournamentId: req.params.id,
+      userId: req.user._id,
+    }).sort({ createdAt: -1 });
+
+    res.status(200).json({ trades });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 module.exports = {
   createTournament,
@@ -342,4 +356,5 @@ module.exports = {
   tournamentBuy,
   tournamentSell,
   getLeaderboard,
+  getTournamentTrades,
 };

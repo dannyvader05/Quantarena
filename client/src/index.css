@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+
+.light body, .light {
+  background-color: #f6f8fa;
+}
+.light nav {
+  background-color: rgba(255,255,255,0.8) !important;
+  border-color: #d0d7de !important;
+}

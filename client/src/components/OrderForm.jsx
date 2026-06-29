@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { TrendingUp, TrendingDown } from 'lucide-react'
+import StockInsight from './StockInsight'
 import api from '../services/api'
 
 const OrderForm = ({ stock, onSuccess }) => {
@@ -75,9 +76,10 @@ const OrderForm = ({ stock, onSuccess }) => {
           </div>
         ) : null}
       </div>
+      <StockInsight symbol={stock.symbol} companyName={stock.companyName} />
 
       {/* Buy/Sell toggle */}
-      <div className="flex bg-gray-800 rounded-xl p-1 mb-5">
+      <div className="flex bg-gray-800 rounded-xl p-1 mb-4 mt-3">
         <button
           onClick={() => setType('BUY')}
           className={`flex-1 py-2 rounded-lg text-sm font-semibold transition ${type === 'BUY' ? 'bg-green-500 text-black' : 'text-gray-400 hover:text-white'}`}

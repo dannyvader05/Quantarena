@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import StockSearch from '../components/StockSearch'
 import AllocationChart from '../components/AllocationChart'
+import TournamentTradeHistory from '../components/TournamentTradeHistory'
 import { Trophy, ArrowLeft, TrendingUp, TrendingDown } from 'lucide-react'
 
 const TournamentDetail = () => {
@@ -61,22 +62,28 @@ const TournamentDetail = () => {
 
   const myPortfolio = tournament.myPortfolio
   const holdings = myPortfolio?.holdings || []
+  const totalValue = myPortfolio?.totalValue || tournament.startingCapital
 
-const totalValue = myPortfolio?.totalValue || tournament.startingCapital
-const allocation = [
-  ...holdings.map((h) => ({
-    symbol: h.symbol,
-    value: h.currentValue,
-    percent: (h.currentValue / totalValue) * 100,
-  })),
-  {
-    symbol: 'CASH',
-    value: myPortfolio?.cash || 0,
-    percent: ((myPortfolio?.cash || 0) / totalValue) * 100,
-  },
-]
+  const allocation = [
+    ...holdings.map((h) => ({
+      symbol: h.symbol,
+      value: h.currentValue,
+      percent: (h.currentValue / totalValue) * 100,
+    })),
+    {
+      symbol: 'CASH',
+      value: myPortfolio?.cash || 0,
+      percent: ((myPortfolio?.cash || 0) / totalValue) * 100,
+    },
+  ]
 
   const daysLeft = Math.max(0, Math.ceil((new Date(tournament.endDate) - Date.now()) / (1000 * 60 * 60 * 24)))
+
+  // find current user's rank from the leaderboard by matching cash+holdings owner
+  // (leaderboard entries are keyed by userId, and the logged-in user's entry
+  // is whichever one belongs to them — found via isJoined + their own portfolio match)
+  const myRankEntry = leaderboard.find((p) => p.totalValue === myPortfolio?.totalValue) || null
+  const myRank = myRankEntry?.rank || '—'
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">
@@ -143,6 +150,45 @@ const allocation = [
               </div>
             </div>
 
+            {/* Tournament Details + Your Standing — two cards side by side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p className="text-gray-500 text-xs mb-4 uppercase tracking-wide font-medium">Tournament Details</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-500 text-xs mb-1">Starting Capital</p>
+                    <p className="text-white font-semibold text-base">${tournament.startingCapital.toLocaleString()}</p>
+                  </div>
+                  <div className="border-l border-gray-800 pl-6">
+                    <p className="text-gray-500 text-xs mb-1">Started</p>
+                    <p className="text-white font-semibold text-base">{new Date(tournament.startDate).toLocaleDateString()}</p>
+                  </div>
+                  <div className="border-l border-gray-800 pl-6">
+                    <p className="text-gray-500 text-xs mb-1">Ends</p>
+                    <p className="text-white font-semibold text-base">{new Date(tournament.endDate).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                <p className="text-gray-500 text-xs mb-4 uppercase tracking-wide font-medium">Your Standing</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-gray-500 text-xs mb-1">Rank</p>
+                    <p className="text-amber-400 font-bold text-lg">#{myRank}</p>
+                  </div>
+                  <div className="border-l border-gray-800 pl-6">
+                    <p className="text-gray-500 text-xs mb-1">Participants</p>
+                    <p className="text-white font-semibold text-base">{leaderboard.length}</p>
+                  </div>
+                  <div className="border-l border-gray-800 pl-6">
+                    <p className="text-gray-500 text-xs mb-1">Time Left</p>
+                    <p className="text-white font-semibold text-base">{daysLeft}d</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
 
               {/* Trade panel */}
@@ -151,7 +197,7 @@ const allocation = [
                   <h2 className="text-white font-bold text-sm mb-4">Trade</h2>
                   <StockSearch onSelect={setSelectedStock} />
 
-                  {selectedStock && (
+                  {selectedStock ? (
                     <div className="mt-4 space-y-3">
                       <p className="text-sm text-gray-300 font-medium">{selectedStock.symbol}</p>
                       <div className="flex bg-gray-800 rounded-lg p-1">
@@ -167,6 +213,10 @@ const allocation = [
                         {type === 'BUY' ? 'Buy' : 'Sell'} {selectedStock.symbol}
                       </button>
                     </div>
+                  ) : (
+                    <div className="mt-4 flex items-center justify-center h-24 text-gray-600 text-xs">
+                      Search a stock above to trade
+                    </div>
                   )}
 
                   {message && (
@@ -178,11 +228,11 @@ const allocation = [
               </div>
 
               {/* Holdings table */}
-              <div className="lg:col-span-2">
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <div className="lg:col-span-1">
+                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 h-full">
                   <h2 className="text-white font-bold text-lg mb-4">Your Holdings</h2>
                   {holdings.length === 0 ? (
-                    <p className="text-gray-500 text-sm text-center py-10">No positions yet. Trade above to get started.</p>
+                    <p className="text-gray-500 text-sm text-center py-10">No positions yet. Trade to get started.</p>
                   ) : (
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm">
@@ -190,8 +240,6 @@ const allocation = [
                           <tr className="text-gray-400 border-b border-gray-800">
                             <th className="text-left pb-3 font-medium">Symbol</th>
                             <th className="text-right pb-3 font-medium">Shares</th>
-                            <th className="text-right pb-3 font-medium">Avg Cost</th>
-                            <th className="text-right pb-3 font-medium">Current</th>
                             <th className="text-right pb-3 font-medium">Value</th>
                             <th className="text-right pb-3 font-medium">P&L</th>
                           </tr>
@@ -201,11 +249,9 @@ const allocation = [
                             <tr key={h.symbol} className="border-b border-gray-800/50">
                               <td className="py-3">
                                 <p className="text-white font-semibold">{h.symbol}</p>
-                                <p className="text-gray-500 text-xs">{h.companyName}</p>
+                                <p className="text-gray-500 text-xs">${h.averageCost?.toFixed(2)} avg</p>
                               </td>
                               <td className="py-3 text-right text-white">{h.shares}</td>
-                              <td className="py-3 text-right text-gray-300">${h.averageCost?.toFixed(2)}</td>
-                              <td className="py-3 text-right text-white">${h.currentPrice?.toFixed(2) ?? '—'}</td>
                               <td className="py-3 text-right text-white">${h.currentValue?.toFixed(2)}</td>
                               <td className="py-3 text-right">
                                 <div className={`flex items-center justify-end gap-1 ${h.unrealizedPnL >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -221,15 +267,17 @@ const allocation = [
                   )}
                 </div>
               </div>
+
+              {/* Allocation */}
               <div className="lg:col-span-1">
-                 <AllocationChart allocation={allocation} />
-                </div>
+                <AllocationChart allocation={allocation} />
+              </div>
             </div>
           </>
         )}
 
         {/* Leaderboard — always visible regardless of join state */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
           <h2 className="text-white font-bold text-lg mb-4">Leaderboard</h2>
           <div className="space-y-2">
             {leaderboard.map((p) => (
@@ -256,6 +304,10 @@ const allocation = [
             ))}
           </div>
         </div>
+
+        {tournament.isJoined && (
+          <TournamentTradeHistory tournamentId={id} />
+        )}
       </div>
     </div>
   )

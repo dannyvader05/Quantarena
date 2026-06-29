@@ -4,6 +4,7 @@ import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { Trophy, Plus, Users, Clock, LayoutDashboard, TrendingUp, LogOut} from 'lucide-react'
 
+
 const Tournaments = () => {
   const [tournaments, setTournaments] = useState([])
   const [loading, setLoading] = useState(true)
@@ -11,6 +12,7 @@ const Tournaments = () => {
   const [form, setForm] = useState({ name: '', description: '', startDate: '', endDate: '' })
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  
 
   const fetchTournaments = async () => {
     try {
@@ -75,6 +77,7 @@ const Tournaments = () => {
           <LogOut size={15} />
           Logout
         </button>
+        
         </div>
       </nav>
 
