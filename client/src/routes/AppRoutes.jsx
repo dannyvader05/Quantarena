@@ -5,6 +5,8 @@ import Register from '../pages/Register'
 import Dashboard from '../pages/Dashboard'
 import Trading from '../pages/Trading'
 import ProtectedRoute from '../components/ProtectedRoute'
+import Tournaments from '../pages/Tournaments'
+import TournamentDetail from '../pages/TournamentDetail'
 
 const AppRoutes = () => {
   const { user } = useAuth()
@@ -16,6 +18,8 @@ const AppRoutes = () => {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/trading" element={<ProtectedRoute><Trading /></ProtectedRoute>} />
       <Route path="/" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+      <Route path="/tournaments" element={<ProtectedRoute><Tournaments /></ProtectedRoute>} />
+      <Route path="/tournaments/:id" element={<ProtectedRoute><TournamentDetail /></ProtectedRoute>} />
     </Routes>
   )
 }

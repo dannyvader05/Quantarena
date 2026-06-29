@@ -6,7 +6,7 @@ import TradeHistory from '../components/TradeHistory'
 import usePortfolio from '../hooks/usePortfolio'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { LayoutDashboard, LogOut } from 'lucide-react'
+import { LayoutDashboard, LogOut, Trophy } from 'lucide-react'
 
 const Trading = () => {
   const [selectedStock, setSelectedStock] = useState(null)
@@ -44,6 +44,13 @@ const Trading = () => {
           </div>
 
       <div className="flex items-center gap-1">
+        <button
+          onClick={() => navigate('/tournaments')}
+          className="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800 transition px-3 py-1.5 rounded-lg text-sm"
+      >   
+      <Trophy size={15} />
+      Tournaments
+      </button>
         <button
           onClick={() => navigate('/dashboard')}
           className="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800 transition px-3 py-1.5 rounded-lg text-sm"

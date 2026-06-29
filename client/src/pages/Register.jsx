@@ -47,7 +47,7 @@ const Register = () => {
               name="username"
               value={form.username}
               onChange={handleChange}
-              placeholder="vaibhav"
+              placeholder="Enter your username"
               required
               className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition"
             />
@@ -59,7 +59,7 @@ const Register = () => {
               name="email"
               value={form.email}
               onChange={handleChange}
-              placeholder="vaibhav@gmail.com"
+              placeholder="Enter your email"
               required
               className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition"
             />
@@ -71,7 +71,7 @@ const Register = () => {
               name="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="••••••••"
+              placeholder="Enter your password"
               required
               className="w-full bg-gray-800 border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-green-500 transition"
             />

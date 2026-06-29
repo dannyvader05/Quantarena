@@ -6,7 +6,7 @@ import PerformanceChart from '../components/PerformanceChart'
 import AllocationChart from '../components/AllocationChart'
 import AnalyticsStats from '../components/AnalyticsStats'
 import Watchlist from '../components/Watchlist'
-import { LogOut, TrendingUp } from 'lucide-react'
+import { LogOut, TrendingUp, Trophy } from 'lucide-react'
 
 const Dashboard = () => {
   const { user, logout } = useAuth()
@@ -33,6 +33,13 @@ const Dashboard = () => {
       <nav className="border-b border-gray-800 px-6 py-4 flex items-center justify-between">
         <h1 className="text-green-400 font-bold text-xl">QuantArena</h1>
         <div className="flex items-center gap-4">
+           <button
+          onClick={() => navigate('/tournaments')}
+          className="flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800 transition px-3 py-1.5 rounded-lg text-sm"
+      >   
+      <Trophy size={15} />
+      Tournaments
+      </button>
           <button onClick={() => navigate('/trading')}
             className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-black font-bold px-4 py-2 rounded-lg text-sm transition">
             <TrendingUp size={16} /> Trade
