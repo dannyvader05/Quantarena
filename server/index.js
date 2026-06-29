@@ -20,7 +20,7 @@ const server = http.createServer(app);
 
 app.use(cors({
   origin: process.env.NODE_ENV === "production"
-    ? "https://quantarena-rho.vercel.app"
+    ? "https://quantarena-seven.vercel.app"
     : true,
   credentials: true,
 }));

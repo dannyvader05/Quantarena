@@ -13,7 +13,7 @@ const initSocket = (server) => {
   io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === "production"
-      ? "https://quantarena-rho.vercel.app"
+      ? "https://quantarena-seven.vercel.app"
       : true,
     credentials: true,
   },
