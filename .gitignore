@@ -1,4 +1,5 @@
 node_mudules
-
+.env.production
 notes
 server/.env
+git 
