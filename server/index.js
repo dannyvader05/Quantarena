@@ -18,7 +18,12 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: process.env.NODE_ENV === "production"
+    ? "https://quantarena-omega.vercel.app"
+    : true,
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 

@@ -19,8 +19,8 @@ export const SocketProvider = ({ children }) => {
 
     const token = localStorage.getItem('accessToken')
 
-    const socket = io('http://localhost:4000', {
-      auth: { token },
+    const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000', {
+    auth: { token },
     })
 
     socket.on('connect', () => {

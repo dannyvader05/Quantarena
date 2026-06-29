@@ -11,11 +11,13 @@ let broadcastInterval = null;
 
 const initSocket = (server) => {
   io = new Server(server, {
-    cors: {
-      origin: true,
-      credentials: true,
-    },
-  });
+  cors: {
+    origin: process.env.NODE_ENV === "production"
+      ? "https://quantarena-omega.vercel.app"
+      : true,
+    credentials: true,
+  },
+});
 
   io.use((socket, next) => {
     try {
